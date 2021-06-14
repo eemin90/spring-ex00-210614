@@ -8,6 +8,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @RequiredArgsConstructor
 public class Desk {
+	
 	private final double price;
 	private final String model;
 	private String name;
