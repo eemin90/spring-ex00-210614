@@ -43,9 +43,59 @@ public class BoardController {
 		// service에게 등록업무 시키고
 		service.register(board);
 		
+		// redirect 목적지로 정보 전달
 		rttr.addFlashAttribute("result", board.getBno());
 		
 		// /board/list로 redirect
 		return "redirect:/board/list";
+	}
+	
+	@GetMapping({"/get", "/modify"})
+	public void get(Long bno, Model model) {
+		// service에게 일 시킴
+		BoardVO vo = service.get(bno);
+		
+		//결과를 모델에 넣음
+		model.addAttribute("board", vo);
+		
+		// forward
+	}
+	
+	@PostMapping("/modify")
+	public String modify(BoardVO board, RedirectAttributes rttr) {
+		// request parameter 수집
+		
+		// service 일 시킴
+		boolean success = service.modify(board);
+		
+		// 결과를 모델(또는 FlashMap)에 넣고
+		if (success) {
+			rttr.addFlashAttribute("modify", board.getBno());
+		}
+		
+		// forward or redirect
+		return "redirect:/board/list";
+	}
+	
+	@PostMapping("/remove")
+	public String remove(Long bno, RedirectAttributes rttr) {
+		// request parameter 수집
+		
+		// service 일 시킴
+		BoardVO vo = service.get(bno);
+		boolean success = service.remove(bno);
+		
+		// 결과 담고
+		if (success) {
+			rttr.addFlashAttribute("remove", vo);
+		}
+		
+		// forward or redirect
+		return "redirect:/board/list";
+	}
+	
+	@GetMapping("/register")
+	public void register() {
+		// 자동으로 /WEB-INF/views/board/register.jsp 경로로 forward됨
 	}
 }
