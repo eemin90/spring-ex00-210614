@@ -62,6 +62,7 @@
 						<c:param name="amount" value="${pageMaker.cri.amount}" />
 					</c:url>
 
+					<!-- 제목의 길이가 30 이상이면 30자 까지만 출력하고 뒤에 '...'을 붙인다 -->
 					<c:choose>
 						<c:when test="${fn:length(board.title) >= 30}">
 							<td>
@@ -77,6 +78,7 @@
 						</c:when>
 					</c:choose>
 
+					<!-- 작성자의 길이가 10 이상이면 10자 까지만 출력하고 뒤에 '...'을 붙인다 -->
 					<c:choose>
 						<c:when test="${fn:length(board.writer) >= 10}">
 							<td>${fn:substring(board.writer, 0, 10)}...</td>
