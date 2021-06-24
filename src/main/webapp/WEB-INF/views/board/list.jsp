@@ -85,6 +85,7 @@
 							<td>${board.writer}</td>
 						</c:when>
 					</c:choose>
+					
 					<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${board.regdate}" /></td>
 					<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${board.updateDate}" /></td>
 				</tr>
