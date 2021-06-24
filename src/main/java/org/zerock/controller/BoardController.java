@@ -5,10 +5,13 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
+import org.zerock.domain.PageDTO;
 import org.zerock.service.BoardService;
 
 import lombok.AllArgsConstructor;
@@ -28,13 +31,16 @@ public class BoardController {
 //	}
 	
 	@GetMapping("/list")
-	public void list(Model model) {
+	public void list(@ModelAttribute("cri") Criteria cri, Model model) {
 		log.info("board/list method...");
 		
+		int total = service.getTotal(cri);
+		
 		// service getList() 실행 결과를
-		List<BoardVO> list = service.getList();
+		List<BoardVO> list = service.getList(cri);
 		// model에 attribute로 넣고
 		model.addAttribute("list", list);
+		model.addAttribute("pageMaker", new PageDTO(cri, total));
 		// view로 포워드
 	}
 	
@@ -51,7 +57,7 @@ public class BoardController {
 	}
 	
 	@GetMapping({"/get", "/modify"})
-	public void get(Long bno, Model model) {
+	public void get(Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
 		// service에게 일 시킴
 		BoardVO vo = service.get(bno);
 		
@@ -62,7 +68,7 @@ public class BoardController {
 	}
 	
 	@PostMapping("/modify")
-	public String modify(BoardVO board, RedirectAttributes rttr) {
+	public String modify(BoardVO board, Criteria cri, RedirectAttributes rttr) {
 		// request parameter 수집
 		
 		// service 일 시킴
@@ -73,12 +79,16 @@ public class BoardController {
 			rttr.addFlashAttribute("modify", board.getBno());
 		}
 		
+		// redirect의 QueryString 값으로 주려면 addAttribute를 이용해야 한다.
+		rttr.addAttribute("pageNum", cri.getPageNum());
+		rttr.addAttribute("amount", cri.getAmount());
+		
 		// forward or redirect
 		return "redirect:/board/list";
 	}
 	
 	@PostMapping("/remove")
-	public String remove(Long bno, RedirectAttributes rttr) {
+	public String remove(Long bno, Criteria cri, RedirectAttributes rttr) {
 		// request parameter 수집
 		
 		// service 일 시킴
@@ -90,12 +100,15 @@ public class BoardController {
 			rttr.addFlashAttribute("remove", vo);
 		}
 		
+		rttr.addAttribute("pageNum", cri.getPageNum());
+		rttr.addAttribute("amount", cri.getAmount());
+		
 		// forward or redirect
 		return "redirect:/board/list";
 	}
 	
 	@GetMapping("/register")
-	public void register() {
+	public void register(@ModelAttribute("cri") Criteria cri) {
 		// 자동으로 /WEB-INF/views/board/register.jsp 경로로 forward됨
 	}
 }

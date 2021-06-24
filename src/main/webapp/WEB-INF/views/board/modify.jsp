@@ -45,6 +45,11 @@
 					<label for="input2">작성자</label>
 					<input id="input2" class="form-control" name="writer" value="${board.writer}" readonly>
 				</div>
+				
+				<!-- controller의 modify로 post 방식으로 이동할 때 pageNum, amount 값을 전달 -->
+				<input name="pageNum" value="${cri.pageNum}" hidden>
+				<input name="amount" value="${cri.amount}" hidden>
+				
 				<hr>
 				<input class="btn btn-secondary" type="submit" value="수정">
 				<input id="board-remove-btn1" class="btn btn-danger" type="button" value="삭제">

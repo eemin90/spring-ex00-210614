@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.zerock.domain.BoardVO;
-import org.zerock.domain.Test1VO;
+import org.zerock.domain.Criteria;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -126,6 +126,15 @@ public class BoardMapperTests {
 		assertEquals(board.getTitle(), board20.getTitle());
 		assertEquals(board.getContent(), board20.getContent());
 		assertEquals(board.getWriter(), board20.getWriter());
+	}
+	
+	@Test
+	public void testPaging() {
+		Criteria cri = new Criteria();
+		List<BoardVO> list = mapper.getListWithPaging(cri);
+		
+		assertEquals(10, list.size());
+//		list.forEach(board -> log.info(board));
 	}
 
 }

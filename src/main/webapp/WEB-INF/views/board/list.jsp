@@ -18,12 +18,26 @@
 			$('#modal1').modal('show');
 			history.replaceState({}, null);
 		}
+		
+		$("#list-pagenation1 a").click(function(e) {
+			// hyperlink 역할 중지
+			e.preventDefault();
+			
+			var actionForm = $("#actionForm");
+			
+			// form의 input 태그의 pageNum값을 a 요소의 href 값으로 변경
+			actionForm.find("[name=pageNum]").val($(this).attr("href"));
+			
+			actionForm.submit();
+		});
 	});
 </script>
 
 </head>
 <body>
 <my:navbar />
+
+<!-- List -->
 <div class="container">
 	<h1>글 목록</h1>
 	<table class="table table-striped">
@@ -40,10 +54,37 @@
 			<c:forEach items="${list}" var="board">
 				<tr>
 					<td>${board.bno}</td>
-					<td>
-						<a href="${appRoot}/board/get?bno=${board.bno}">${board.title}</a>
-					</td>
-					<td>${board.writer}</td>
+					
+					<!-- ${getUrl}을 쓰면 ${appRoot}/board/get?bno=${board.bno}&pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount} 이라고 보면 됨 -->
+					<c:url value="/board/get" var="getUrl">
+						<c:param name="bno" value="${board.bno}" />
+						<c:param name="pageNum" value="${pageMaker.cri.pageNum}" />
+						<c:param name="amount" value="${pageMaker.cri.amount}" />
+					</c:url>
+
+					<c:choose>
+						<c:when test="${fn:length(board.title) >= 30}">
+							<td>
+								<!-- getUrl 사용 -->
+								<a href="${getUrl}">${fn:substring(board.title, 0, 30)}...</a>
+							</td>
+						</c:when>
+						<c:when test="${fn:length(board.title) < 30}">
+							<td>
+								<!-- getUrl 사용 -->
+								<a href="${getUrl}">${board.title}</a>
+							</td>
+						</c:when>
+					</c:choose>
+
+					<c:choose>
+						<c:when test="${fn:length(board.writer) >= 10}">
+							<td>${fn:substring(board.writer, 0, 10)}...</td>
+						</c:when>
+						<c:when test="${fn:length(board.writer) < 10}">
+							<td>${board.writer}</td>
+						</c:when>
+					</c:choose>
 					<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${board.regdate}" /></td>
 					<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${board.updateDate}" /></td>
 				</tr>
@@ -52,9 +93,34 @@
 	</table>
 </div>
 
+<!-- Pagenation -->
+<nav aria-label="Page navigation">
+	<ul id="list-pagenation1" class="pagination justify-content-center">
+		<c:if test="${pageMaker.prev}">
+			<li class="page-item"><a class="page-link" href="${pageMaker.startPage - 1}">Previous</a></li>
+		</c:if>
+		<c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
+			<!-- hrev value
+			<li class="page-item"><a class="page-link" href="${appRoot}/board/list?pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}">${num}</a></li>
+			-->
+			<li class="page-item"><a class="page-link" href="${num}">${num}</a></li>
+		</c:forEach>
+		<c:if test="${pageMaker.next}">
+			<li class="page-item"><a class="page-link" href="${pageMaker.endPage + 1}">Next</a></li>
+		</c:if>
+	</ul>
+</nav>
+
+<div style="display: none;">
+	<form id="actionForm" action="${appRoot}/board/list" method="get">
+		<input name="pageNum" value="${pageMaker.cri.pageNum}">
+		<input name="amount" value="${pageMaker.cri.amount}">
+	</form>
+</div>
+
+<!-- Modal -->
 <c:choose>
 	<c:when test="${not empty result}">
-		<!-- Modal -->
 		<div class="modal fade" id="modal1" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal1Label" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -73,7 +139,6 @@
 		</div>
 	</c:when>
 	<c:when test="${not empty modify}">
-		<!-- Modal -->
 		<div class="modal fade" id="modal1" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal1Label" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -92,7 +157,6 @@
 		</div>
 		</c:when>
 	<c:when test="${not empty remove}">
-		<!-- Modal -->
 		<div class="modal fade" id="modal1" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal1Label" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">

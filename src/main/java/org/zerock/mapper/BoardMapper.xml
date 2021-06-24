@@ -21,6 +21,31 @@
 	]]>
 	</select>
 	
+	<select id="getListWithPaging" resultType="org.zerock.domain.BoardVO">
+	<![CDATA[
+	
+		SELECT
+			bno bno,
+			title title,
+			content content,
+			writer writer,
+			regdate regdate,
+			updatedate updatedate
+			
+		FROM tbl_board
+		
+		ORDER BY bno DESC
+		
+		LIMIT #{from}, #{amount}
+		
+	]]>
+	</select>
+	<!-- 위의 #{from}은 Criteria의 getFrom() 메서드(SQL문 완성에 필요한 *(곱하기)가 사용 불가한 관계로 미리 수식을 작성하여 대입) -->
+	
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(*) FROM tbl_board
+	</select>
+	
 	<insert id="insert">
 		INSERT INTO tbl_board (title, content, writer)
 		VALUES (#{title}, #{content}, #{writer})
