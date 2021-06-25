@@ -12,6 +12,9 @@ public class Criteria {
 	private int pageNum;
 	private int amount;
 	
+	private String type;
+	private String keyword;
+	
 	public Criteria() {
 		this(1, 10); // pageNum 1, amount 10으로 초기화
 	}
@@ -23,5 +26,14 @@ public class Criteria {
 	
 	public int getFrom() {
 		return amount * (pageNum - 1);
+	}
+	
+	public String[] getTypeArr() {
+		if (type == null) {
+			return new String[] {}; // type이 null이면 빈 배열 return
+		} else {
+			String[] types = type.split("");
+			return types;
+		}
 	}
 }

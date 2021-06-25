@@ -82,6 +82,8 @@ public class BoardController {
 		// redirect의 QueryString 값으로 주려면 addAttribute를 이용해야 한다.
 		rttr.addAttribute("pageNum", cri.getPageNum());
 		rttr.addAttribute("amount", cri.getAmount());
+		rttr.addAttribute("type", cri.getType());
+		rttr.addAttribute("keyword", cri.getKeyword());
 		
 		// forward or redirect
 		return "redirect:/board/list";
@@ -102,6 +104,8 @@ public class BoardController {
 		
 		rttr.addAttribute("pageNum", cri.getPageNum());
 		rttr.addAttribute("amount", cri.getAmount());
+		rttr.addAttribute("type", cri.getType());
+		rttr.addAttribute("keyword", cri.getKeyword());
 		
 		// forward or redirect
 		return "redirect:/board/list";

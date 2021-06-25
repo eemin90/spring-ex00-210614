@@ -3,6 +3,26 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.zerock.mapper.BoardMapper">
+
+	<!-- 다른 SQL문에서 <include refid="criteria"></include>로 해당 동적 SQL 이용가능 -->
+	<sql id="criteria">
+		<where>
+			<foreach item="type" separator="OR" collection="typeArr">
+				<choose>
+					<when test='type == "T"'>
+						title LIKE CONCAT('%', #{keyword}, '%') 
+					</when>
+					<when test='type == "W"'>
+						writer LIKE CONCAT('%', #{keyword}, '%') 
+					</when>
+					<when test='type == "C"'>
+						content LIKE CONCAT('%', #{keyword}, '%') 
+					</when>
+				</choose>
+			</foreach>
+		</where>
+	</sql>
+
 	<select id="getList" resultType="org.zerock.domain.BoardVO">
 	<![CDATA[
 	
@@ -22,7 +42,6 @@
 	</select>
 	
 	<select id="getListWithPaging" resultType="org.zerock.domain.BoardVO">
-	<![CDATA[
 	
 		SELECT
 			bno bno,
@@ -33,17 +52,32 @@
 			updatedate updatedate
 			
 		FROM tbl_board
-		
+		<where>
+			<foreach item="type" separator="OR" collection="typeArr">
+				<choose>
+					<when test='type == "T"'>
+						title LIKE CONCAT('%', #{keyword}, '%') 
+					</when>
+					<when test='type == "W"'>
+						writer LIKE CONCAT('%', #{keyword}, '%') 
+					</when>
+					<when test='type == "C"'>
+						content LIKE CONCAT('%', #{keyword}, '%') 
+					</when>
+				</choose>
+			</foreach>
+		</where>
+	
 		ORDER BY bno DESC
 		
 		LIMIT #{from}, #{amount}
 		
-	]]>
 	</select>
 	<!-- 위의 #{from}은 Criteria의 getFrom() 메서드(SQL문 완성에 필요한 *(곱하기)가 사용 불가한 관계로 미리 수식을 작성하여 대입) -->
 	
 	<select id="getTotalCount" resultType="int">
 		SELECT COUNT(*) FROM tbl_board
+		<include refid="criteria"></include>
 	</select>
 	
 	<insert id="insert">

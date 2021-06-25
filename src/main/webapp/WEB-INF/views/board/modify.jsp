@@ -46,9 +46,11 @@
 					<input id="input2" class="form-control" name="writer" value="${board.writer}" readonly>
 				</div>
 				
-				<!-- controller의 modify로 post 방식으로 이동할 때 pageNum, amount 값을 전달 -->
-				<input name="pageNum" value="${cri.pageNum}" hidden>
-				<input name="amount" value="${cri.amount}" hidden>
+				<!-- controller의 modify로 post 방식으로 이동할 때 값을 전달 -->
+				<input name="pageNum" value="${cri.pageNum}" hidden />
+				<input name="amount" value="${cri.amount}" hidden />
+				<input name="type" value="${cri.type}" hidden />
+				<input name="keyword" value="${cri.keyword}" hidden />
 				
 				<hr>
 				<input class="btn btn-secondary" type="submit" value="수정">

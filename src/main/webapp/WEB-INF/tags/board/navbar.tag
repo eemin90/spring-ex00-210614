@@ -5,11 +5,15 @@
 <c:url value="/board/list" var="listUrl">
 	<c:param name="pageNum" value="${cri.pageNum}" />
 	<c:param name="amount" value="${cri.amount}" />
+	<c:param name="keyword" value="${cri.keyword}" />
+	<c:param name="type" value="${cri.type}" />
 </c:url>
 
 <c:url value="/board/register" var="registerUrl">
 	<c:param name="pageNum" value="${cri.pageNum}" />
 	<c:param name="amount" value="${cri.amount}" />
+	<c:param name="keyword" value="${cri.keyword}" />
+	<c:param name="type" value="${cri.type}" />
 </c:url>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -27,4 +31,22 @@
 			</li>
 		</ul>
 	</div>
+
+	<form action="${listUrl}" method="get" class="form-inline">
+		<select name="type" class="form-control mr-sm-2">
+			<option value="">검색 조건을 선택하세요</option>
+			<option value="T" ${cri.type == "T" ? 'selected' : ''}>제목</option>
+			<option value="C" ${cri.type == "C" ? 'selected' : ''}>내용</option>
+			<option value="W" ${cri.type == "W" ? 'selected' : ''}>작성자</option>
+			<option value="TC" ${cri.type == "TC" ? 'selected' : ''}>제목 or 내용</option>
+			<option value="TW" ${cri.type == "TW" ? 'selected' : ''}>제목 or 작성자</option>
+			<option value="TWC" ${cri.type == "TWC" ? 'selected' : ''}>제목 or 내용 or 작성자</option>
+		</select>
+		<input name="keyword" value="${cri.keyword}" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
+		
+		<input name="pageNum" value="1" hidden />
+		<input name="amount" value="${cri.amount}" hidden />
+		
+		<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+	</form>
 </nav>

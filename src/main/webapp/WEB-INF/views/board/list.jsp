@@ -55,11 +55,13 @@
 				<tr>
 					<td>${board.bno}</td>
 					
-					<!-- ${getUrl}을 쓰면 ${appRoot}/board/get?bno=${board.bno}&pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount} 이라고 보면 됨 -->
+					<!-- ${getUrl}을 쓰면 ${appRoot}/board/get?bno=${board.bno}&pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}... 이라고 보면 됨 -->
 					<c:url value="/board/get" var="getUrl">
 						<c:param name="bno" value="${board.bno}" />
 						<c:param name="pageNum" value="${pageMaker.cri.pageNum}" />
 						<c:param name="amount" value="${pageMaker.cri.amount}" />
+						<c:param name="type" value="${pageMaker.cri.type}" />
+						<c:param name="keyword" value="${pageMaker.cri.keyword}" />
 					</c:url>
 
 					<!-- 제목의 길이가 30 이상이면 30자 까지만 출력하고 뒤에 '...'을 붙인다 -->
@@ -103,10 +105,10 @@
 			<li class="page-item"><a class="page-link" href="${pageMaker.startPage - 1}">Previous</a></li>
 		</c:if>
 		<c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
-			<!-- hrev value
+			<!-- href value
 			<li class="page-item"><a class="page-link" href="${appRoot}/board/list?pageNum=${pageMaker.cri.pageNum}&amount=${pageMaker.cri.amount}">${num}</a></li>
 			-->
-			<li class="page-item"><a class="page-link" href="${num}">${num}</a></li>
+			<li class="page-item ${num == cri.pageNum ? 'active' : ''}"><a class="page-link" href="${num}">${num}</a></li>
 		</c:forEach>
 		<c:if test="${pageMaker.next}">
 			<li class="page-item"><a class="page-link" href="${pageMaker.endPage + 1}">Next</a></li>
@@ -114,10 +116,13 @@
 	</ul>
 </nav>
 
+<!-- Pagenation Form -->
 <div style="display: none;">
 	<form id="actionForm" action="${appRoot}/board/list" method="get">
-		<input name="pageNum" value="${pageMaker.cri.pageNum}">
-		<input name="amount" value="${pageMaker.cri.amount}">
+		<input name="pageNum" value="${cri.pageNum}" />
+		<input name="amount" value="${cri.amount}" />
+		<input name="type" value="${cri.type}" />
+		<input name="keyword" value="${cri.keyword}" />
 	</form>
 </div>
 
