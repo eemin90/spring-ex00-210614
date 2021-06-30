@@ -2,6 +2,9 @@ package org.zerock.mapper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,6 +74,14 @@ public class ReplyMapperTests {
 		vo = mapper.read(3L);
 		assertEquals(update, vo.getReply());
 		
+	}
+	
+	@Test
+	public void testGetList() {
+		List<ReplyVO> list = mapper.getList(136L);
+		
+		assertTrue(list.size() > 0);
+		log.info("LOG: " + list);
 	}
 
 }
