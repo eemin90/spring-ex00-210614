@@ -61,6 +61,7 @@ var boardBno = "${board.bno}";
 	<div class="row">
 		<div class="col-12">
 			<h4>댓글</h4>
+			<hr>
 			<ul class="list-unstyled" id="reply-list-container">
 				
 			</ul>
@@ -69,7 +70,7 @@ var boardBno = "${board.bno}";
 </div>
 
 <!-- 댓글 입력 -->
-<div class="container mt-5">
+<div class="container">
 	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reply-insert-modal">댓글 작성</button>
 	
 	<div class="modal fade" id="reply-insert-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
