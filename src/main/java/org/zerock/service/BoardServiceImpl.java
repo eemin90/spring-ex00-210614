@@ -23,7 +23,7 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-@AllArgsConstructor
+//@AllArgsConstructor
 @Service
 public class BoardServiceImpl implements BoardService {
 
@@ -47,6 +47,11 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Setter(onMethod_ = @Autowired)
 	private FileMapper fileMapper;
+	
+//	@Autowired
+//	public BoardServiceImpl(BoardMapper mapper) {
+//		this.mapper = mapper;
+//	}
 	
 	@Override
 	public void register(BoardVO board) {
@@ -128,6 +133,17 @@ public class BoardServiceImpl implements BoardService {
 		int cnt = mapper.delete(bno);
 
 		return cnt == 1;
+	}
+	
+	@Override
+	@Transactional
+	public void fremove(BoardVO board, MultipartFile file) {
+		// 파일 삭제(AWS)
+		BoardVO vo = mapper.read(board.getBno());
+		removeFile(vo);
+		
+		// 파일 삭제(DB)
+		fileMapper.deleteByBno(board.getBno());
 	}
 
 	private void removeFile(BoardVO vo) {
