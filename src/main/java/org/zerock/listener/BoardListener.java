@@ -28,9 +28,12 @@ public class BoardListener implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent sce)  { 
-         ServletContext application = sce.getServletContext();
-         
-         application.setAttribute("appRoot", application.getContextPath());
+    	ServletContext application = sce.getServletContext();
+        application.setAttribute("appRoot", application.getContextPath());
+        
+        // aws s3 bucket 주소
+        String bucketUrl = "https://choongang-eemin90.s3.ap-northeast-2.amazonaws.com/";
+        application.setAttribute("imgRoot", bucketUrl);
     }
 	
 }
